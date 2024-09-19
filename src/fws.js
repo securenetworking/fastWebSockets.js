@@ -17,9 +17,9 @@
 
 module.exports = (() => {
 	try {
-		return require('./uws_' + process.platform + '_' + process.arch + '_' + process.versions.modules + '.node');
+		return require('./fws_' + process.platform + '_' + process.arch + '_' + process.versions.modules + '.node');
 	} catch (e) {
-		throw new Error('This version of uWS.js supports only Node.js versions 18, 20, 21 and 22 on (glibc) Linux, macOS and Windows, on Tier 1 platforms (https://github.com/nodejs/node/blob/master/BUILDING.md#platform-list).\n\n' + e.toString());
+		throw new Error('This version of fWS.js supports only Node.js versions 18, 20, 21 and 22 on (glibc) Linux, macOS and Windows, on Tier 1 platforms (https://github.com/nodejs/node/blob/master/BUILDING.md#platform-list).\n\n' + e.toString());
 	}
 })();
 

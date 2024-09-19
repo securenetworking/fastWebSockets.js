@@ -1,12 +1,12 @@
 /* Minimal example that shuts down gracefully */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
 /* We store the listen socket here, so that we can shut it down later */
 let listenSocket;
 
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'
@@ -14,7 +14,7 @@ const app = uWS./*SSL*/App({
   if (listenSocket) {
     res.end('Okay, shutting down now!');
     /* This function is provided directly by µSockets */
-    uWS.us_listen_socket_close(listenSocket);
+    fWS.us_listen_socket_close(listenSocket);
     listenSocket = null;
   } else {
     /* We just refuse if alrady shutting down */
@@ -30,7 +30,7 @@ const app = uWS./*SSL*/App({
     /* Stop listening soon */
     setTimeout(() => {
       console.log('Shutting down now');
-      uWS.us_listen_socket_close(listenSocket);
+      fWS.us_listen_socket_close(listenSocket);
       listenSocket = null;
     }, 1000);
   } else {

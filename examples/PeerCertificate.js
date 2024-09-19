@@ -21,10 +21,10 @@ fs.writeFileSync(path.join(__dirname, "server.ca"), caCertPem);
 fs.writeFileSync(path.join(__dirname, "server.key"), serverKeyPem);
 fs.writeFileSync(path.join(__dirname, "server.cert"), serverCertPem);
 
-const uWS = require('../dist/uws');
+const fWS = require('../dist/fws');
 const port = 8086;
 
-const app = uWS.SSLApp({
+const app = fWS.SSLApp({
   cert_file_name: path.join(__dirname, "server.cert"),
   key_file_name: path.join(__dirname, "server.key"),
   ca_file_name: path.join(__dirname, "server.ca")

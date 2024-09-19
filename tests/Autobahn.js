@@ -1,5 +1,5 @@
 /* Test servers for autobahn, run with ASAN. /exit route shuts down everything */
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 
 /* Keep track of all apps */
 let apps = [];
@@ -14,7 +14,7 @@ function listenWithSettings(settings) {
   };
 
   /* Create the app */
-  let app = settings.ssl ? uWS.SSLApp(sslOptions) : uWS.App(sslOptions);
+  let app = settings.ssl ? fWS.SSLApp(sslOptions) : fWS.App(sslOptions);
 
   /* Attach our behavior from settings */
   app.ws('/*', {
@@ -38,7 +38,7 @@ function listenWithSettings(settings) {
     /* Shut down everything on this route */
     if (!closing) {
       apps.forEach((a) => {
-        uWS.us_listen_socket_close(a.listenSocket);
+        fWS.us_listen_socket_close(a.listenSocket);
       });
       closing = true;
     }
@@ -65,7 +65,7 @@ function listenWithSettings(settings) {
 listenWithSettings({
   port: 9001,
   ssl: false,
-  compression: uWS.DISABLED,
+  compression: fWS.DISABLED,
   pubsub: false
 });
 
@@ -73,7 +73,7 @@ listenWithSettings({
 listenWithSettings({
   port: 9002,
   ssl: true,
-  compression: uWS.SHARED_COMPRESSOR,
+  compression: fWS.SHARED_COMPRESSOR,
   pubsub: false
 });
 
@@ -81,7 +81,7 @@ listenWithSettings({
 listenWithSettings({
   port: 9003,
   ssl: false,
-  compression: uWS.DEDICATED_COMPRESSOR,
+  compression: fWS.DEDICATED_COMPRESSOR,
   pubsub: false
 });
 
@@ -89,7 +89,7 @@ listenWithSettings({
 listenWithSettings({
   port: 9004,
   ssl: false,
-  compression: uWS.DISABLED,
+  compression: fWS.DISABLED,
   pubsub: true
 });
 
@@ -97,6 +97,6 @@ listenWithSettings({
 listenWithSettings({
   port: 9005,
   ssl: true,
-  compression: uWS.DISABLED,
+  compression: fWS.DISABLED,
   pubsub: true
 });

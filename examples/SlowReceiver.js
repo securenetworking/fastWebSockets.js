@@ -1,11 +1,11 @@
 
 
-const uWS = require('uWebSockets.js');
+const fWS = require('fastWebSockets.js');
 const port = 9001;
 
 const wsc = require('ws');
 
-const app = uWS.App().ws('/*', {
+const app = fWS.App().ws('/*', {
   /* Options */
   maxPayloadLength: 16 * 1024 * 1024,
   idleTimeout: 10,

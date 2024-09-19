@@ -9,7 +9,7 @@
 /* We use websockets/ws as client counterpart */
 const WebSocket = require('ws');
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
 let openedClientConnections = 0;
@@ -39,7 +39,7 @@ function accountForConnection() {
         establishNewConnection();
     } else {
         /* Stop listening */
-        uWS.us_listen_socket_close(listenSocket);
+        fWS.us_listen_socket_close(listenSocket);
     }
 }
 
@@ -112,7 +112,7 @@ function performRandomClientAction(ws) {
     }
 }
 
-/* Perform random uWebSockets.js action */
+/* Perform random fastWebSockets.js action */
 function performRandomServerAction(ws, uniform) {
     /* 0, 1, 2 but never 3 */
     let action = getRandomInt(3);
@@ -148,7 +148,7 @@ function performRandomServerAction(ws, uniform) {
     }
 }
 
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'
@@ -185,7 +185,7 @@ const app = uWS./*SSL*/App({
         return;
     }
     /* We should never land here */
-    uWS.print('ERROR: Did not throw in close!');
+    fWS.print('ERROR: Did not throw in close!');
     process.exit(-1);
   }
 }).any('/*', (res, req) => {

@@ -1,4 +1,4 @@
-const uWS = require('../uws.js');
+const fWS = require('../fws.js');
 const WebSocket = require('ws');
 
 const expectedCloseReasons = {
@@ -8,10 +8,10 @@ const expectedCloseReasons = {
 
 let closeTestsPassed = true;
 
-// Create a minimal uWebSockets.js server
+// Create a minimal fastWebSockets.js server
 const port = 9001;
 
-const server = uWS.App().ws('/*', {
+const server = fWS.App().ws('/*', {
   open: (ws) => {
     console.log('A WebSocket connected!');
   },

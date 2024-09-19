@@ -59,22 +59,22 @@ struct PerContextData {
     UniquePersistent<Object> wsTemplate[2];
 
     /* We hold all apps until free */
-    std::vector<std::unique_ptr<uWS::App>> apps;
-    std::vector<std::unique_ptr<uWS::SSLApp>> sslApps;
+    std::vector<std::unique_ptr<fWS::App>> apps;
+    std::vector<std::unique_ptr<fWS::SSLApp>> sslApps;
 };
 
 template <class APP>
 static constexpr int getAppTypeIndex() {
     /* Returns 1 for SSLApp and 0 for App */
-    //return std::is_same<APP, uWS::SSLApp>::value;
+    //return std::is_same<APP, fWS::SSLApp>::value;
 
     /* Returns 2 for H3App */
 
-    if constexpr (std::is_same<APP, uWS::App>::value) {
+    if constexpr (std::is_same<APP, fWS::App>::value) {
         return 0;
-    } else if constexpr (std::is_same<APP, uWS::SSLApp>::value) {
+    } else if constexpr (std::is_same<APP, fWS::SSLApp>::value) {
         return 1;
-    } else if constexpr (std::is_same<APP, uWS::H3App>::value) {
+    } else if constexpr (std::is_same<APP, fWS::H3App>::value) {
         return 2;
     } else {
         // why does this fail?

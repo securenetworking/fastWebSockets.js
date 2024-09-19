@@ -1,10 +1,10 @@
 /* Example of looping over all headers (not recommended as production solution,
  * do NOT use this to "solve" your problems with headers, use ONLY for debugging) */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'

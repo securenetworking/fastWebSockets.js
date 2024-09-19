@@ -3,23 +3,23 @@
    "servers": [
       {
          "url": "ws://localhost:9001",
-         "agent": "uWebSockets.js non-SSL, non-compression"
+         "agent": "fastWebSockets.js non-SSL, non-compression"
       },
       {
          "url": "wss://localhost:9002",
-         "agent": "uWebSockets.js SSL, shared compressor"
+         "agent": "fastWebSockets.js SSL, shared compressor"
       },
       {
          "url": "ws://localhost:9003",
-         "agent": "uWebSockets.js non-SSL, dedicated compressor"
+         "agent": "fastWebSockets.js non-SSL, dedicated compressor"
       },
       {
          "url": "ws://localhost:9004",
-         "agent": "uWebSockets.js non-SSL, non-compression, pubsub based"
+         "agent": "fastWebSockets.js non-SSL, non-compression, pubsub based"
       },
       {
          "url": "wss://localhost:9005",
-         "agent": "uWebSockets.js SSL, non-compression, pubsub based"
+         "agent": "fastWebSockets.js SSL, non-compression, pubsub based"
       }
    ],
    "cases": ["*.*"],

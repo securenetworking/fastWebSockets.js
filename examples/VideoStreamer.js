@@ -2,7 +2,7 @@
  * Try navigating to the adderss with Chrome and see the video
  * in real time. */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const fs = require('fs');
 
 const port = 9001;
@@ -92,7 +92,7 @@ function pipeStreamOverResponse(res, readStream, totalSize) {
 }
 
 /* Yes, you can easily swap to SSL streaming by uncommenting here */
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'

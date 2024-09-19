@@ -9,7 +9,7 @@
  * in your system. But by only creating 2 here, it is simple to see the perf. gain on a system of 4 cores, as you can then
  * run the client side on the remaining 2 cores without interfering with the server side. */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 const { Worker, isMainThread, threadId, parentPort } = require('worker_threads');
 const os = require('os');
@@ -17,7 +17,7 @@ const os = require('os');
 if (isMainThread) {
 
 	/* The acceptorApp only listens, but must be SSL if worker apps are SSL and likewise opposite */
-	const acceptorApp = uWS./*SSL*/App({
+	const acceptorApp = fWS./*SSL*/App({
 		key_file_name: 'misc/key.pem',
 		cert_file_name: 'misc/cert.pem',
 		passphrase: '1234'
@@ -42,7 +42,7 @@ if (isMainThread) {
   /* I guess main thread joins by default? */
 } else {
   /* Here we are inside a worker thread */
-  const app = uWS./*SSL*/App({
+  const app = fWS./*SSL*/App({
     key_file_name: 'misc/key.pem',
     cert_file_name: 'misc/cert.pem',
     passphrase: '1234'

@@ -29,13 +29,13 @@ struct HttpRequestWrapper {
     static inline constexpr decltype(auto) getHttpRequest(const FunctionCallbackInfo<Value> &args) {
         Isolate *isolate = args.GetIsolate();
         /* Thow on deleted request */
-        auto *req = (uWS::HttpRequest *) args.Holder()->GetAlignedPointerFromInternalField(0);
+        auto *req = (fWS::HttpRequest *) args.Holder()->GetAlignedPointerFromInternalField(0);
         if (!req) {
-            args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(String::NewFromUtf8(isolate, "uWS.HttpRequest must not be accessed after await or route handler return. See documentation for uWS.HttpRequest and consult the user manual.", NewStringType::kNormal).ToLocalChecked())));
+            args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(String::NewFromUtf8(isolate, "fWS.HttpRequest must not be accessed after await or route handler return. See documentation for fWS.HttpRequest and consult the user manual.", NewStringType::kNormal).ToLocalChecked())));
         }
 
         if constexpr (QUIC) {
-            return (uWS::Http3Request *) req;
+            return (fWS::Http3Request *) req;
         } else {
             return req;
         }
@@ -182,7 +182,7 @@ struct HttpRequestWrapper {
     static Local<Object> init(Isolate *isolate) {
         /* We do clone every request object, we could share them, they are illegal to use outside the function anyways */
         Local<FunctionTemplate> reqTemplateLocal = FunctionTemplate::New(isolate);
-        reqTemplateLocal->SetClassName(String::NewFromUtf8(isolate, QUIC ? "uWS.Http3Request" : "uWS.HttpRequest", NewStringType::kNormal).ToLocalChecked());
+        reqTemplateLocal->SetClassName(String::NewFromUtf8(isolate, QUIC ? "fWS.Http3Request" : "fWS.HttpRequest", NewStringType::kNormal).ToLocalChecked());
         reqTemplateLocal->InstanceTemplate()->SetInternalFieldCount(1);
 
         /* Register our functions */

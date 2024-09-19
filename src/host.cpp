@@ -76,20 +76,20 @@ int main(int argc, char *argv[]) {
         console->Set(String::NewFromUtf8(isolate, "log", NewStringType::kNormal).ToLocalChecked(),
         FunctionTemplate::New(isolate, print));
 
-        // uWS namespace
-        Local<ObjectTemplate> uWS = ObjectTemplate::New(isolate);
+        // fWS namespace
+        Local<ObjectTemplate> fWS = ObjectTemplate::New(isolate);
 
         global->Set(String::NewFromUtf8(isolate, "console", NewStringType::kNormal).ToLocalChecked(),
         console);
-        global->Set(String::NewFromUtf8(isolate, "uWS", NewStringType::kNormal).ToLocalChecked(),
-        uWS);
+        global->Set(String::NewFromUtf8(isolate, "fWS", NewStringType::kNormal).ToLocalChecked(),
+        fWS);
 
         // vi skapar ett context som håller det globala objektet
         Local<Context> context = Context::New(isolate, nullptr, global);
         Context::Scope context_scope(context);
 
-        // register µWS features under uWS namespace
-        Main(Local<Object>::Cast(context->Global()->Get(String::NewFromUtf8(isolate, "uWS", NewStringType::kNormal).ToLocalChecked())));
+        // register µWS features under fWS namespace
+        Main(Local<Object>::Cast(context->Global()->Get(String::NewFromUtf8(isolate, "fWS", NewStringType::kNormal).ToLocalChecked())));
 
         // ladda in scriptet (preprocessa include)
         Local<String> source = String::NewFromUtf8(isolate, code.data(), NewStringType::kNormal, (int) code.length()).ToLocalChecked();
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
         Local<Value> result = script->Run(context).ToLocalChecked();
 
         // kör servern nu
-        uWS::Loop::defaultLoop()->run();
+        fWS::Loop::defaultLoop()->run();
     }
 
 

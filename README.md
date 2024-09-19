@@ -1,1 +1,1 @@
-# Modified fork of [uWebSockets.js](https://github.com/uNetworking/uWebSockets.js)
+# Modified fork of [fastWebSockets.js](https://github.com/securenetworking/fastWebSockets.js)

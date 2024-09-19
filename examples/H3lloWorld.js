@@ -1,14 +1,14 @@
 /* Minimal HTTP/3 example */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
 /* ./quiche-client --no-verify https://localhost:9001 */
 
-/* The only difference here is that we use uWS.H3App rather than uWS.App or uWS.SSLApp.
+/* The only difference here is that we use fWS.H3App rather than fWS.App or fWS.SSLApp.
  * And of course, there are no WebSockets in HTTP/3 only WebTransport (coming) */
 
-const app = uWS.H3App({
+const app = fWS.H3App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'

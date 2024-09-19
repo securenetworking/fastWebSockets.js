@@ -63,13 +63,13 @@ void build_lsquic(const char *arch) {
 
 #ifdef IS_MACOS
     if (arch == X64) {
-        run("cd uWebSockets/uSockets/lsquic && mkdir -p arm64 && cd arm64 && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES=arm64 -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off .. && make lsquic");
+        run("cd fastWebSockets/fastSockets/lsquic && mkdir -p arm64 && cd arm64 && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES=arm64 -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off .. && make lsquic");
     } else if (arch == ARM64) {
-        run("cd uWebSockets/uSockets/lsquic && mkdir -p x64 && cd x64 && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off .. && make lsquic");
+        run("cd fastWebSockets/fastSockets/lsquic && mkdir -p x64 && cd x64 && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off .. && make lsquic");
     }
 #else
     /* Linux */
-    run("cd uWebSockets/uSockets/lsquic && mkdir -p %s && cd %s && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off .. && make lsquic", arch, arch);
+    run("cd fastWebSockets/fastSockets/lsquic && mkdir -p %s && cd %s && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off .. && make lsquic", arch, arch);
 
 #endif
     
@@ -82,7 +82,7 @@ void build_lsquic(const char *arch) {
     run("curl -OL https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz");
     run("tar xzf zlib-1.3.1.tar.gz");
     
-    run("cd uWebSockets/uSockets/lsquic && cmake -DCMAKE_C_FLAGS=\"/DWIN32 /I..\\..\\..\\zlib-1.3.1\" -DZLIB_INCLUDE_DIR=..\\..\\..\\zlib-1.3.1 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off . && msbuild ALL_BUILD.vcxproj");
+    run("cd fastWebSockets/fastSockets/lsquic && cmake -DCMAKE_C_FLAGS=\"/DWIN32 /I..\\..\\..\\zlib-1.3.1\" -DZLIB_INCLUDE_DIR=..\\..\\..\\zlib-1.3.1 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBORINGSSL_DIR=../boringssl -DCMAKE_BUILD_TYPE=Release -DLSQUIC_BIN=Off . && msbuild ALL_BUILD.vcxproj");
 #endif
 }
 
@@ -92,20 +92,20 @@ void build_boringssl(const char *arch) {
 #ifdef IS_MACOS
     /* Only macOS uses cross-compilation */
     if (arch == X64) {
-        run("cd uWebSockets/uSockets/boringssl && mkdir -p x64 && cd x64 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 .. && make crypto ssl");
+        run("cd fastWebSockets/fastSockets/boringssl && mkdir -p x64 && cd x64 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 .. && make crypto ssl");
     } else if (arch == ARM64) {
-        run("cd uWebSockets/uSockets/boringssl && mkdir -p arm64 && cd arm64 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64 .. && make crypto ssl");
+        run("cd fastWebSockets/fastSockets/boringssl && mkdir -p arm64 && cd arm64 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64 .. && make crypto ssl");
     }
 #endif
     
 #ifdef IS_LINUX
     /* Build for x64 or arm/arm64 (depending on the host) */
-    run("cd uWebSockets/uSockets/boringssl && mkdir -p %s && cd %s && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release .. && make crypto ssl", arch, arch);
+    run("cd fastWebSockets/fastSockets/boringssl && mkdir -p %s && cd %s && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release .. && make crypto ssl", arch, arch);
 #endif
     
 #ifdef IS_WINDOWS
     /* Build for x64 (the host) */
-    run("cd uWebSockets/uSockets/boringssl && mkdir -p x64 && cd x64 && cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -GNinja .. && ninja crypto ssl");
+    run("cd fastWebSockets/fastSockets/boringssl && mkdir -p x64 && cd x64 && cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -GNinja .. && ninja crypto ssl");
 #endif
 
 }
@@ -113,21 +113,21 @@ void build_boringssl(const char *arch) {
 /* Build for Unix systems */
 void build(char *compiler, char *cpp_compiler, char *cpp_linker, char *os, const char *arch) {
 
-    char *c_shared = "-DWIN32_LEAN_AND_MEAN -DLIBUS_USE_LIBUV -DLIBUS_USE_QUIC -I uWebSockets/uSockets/lsquic/include -I uWebSockets/uSockets/boringssl/include -pthread -DLIBUS_USE_OPENSSL -flto -O3 -c -fPIC -I uWebSockets/uSockets/src uWebSockets/uSockets/src/*.c uWebSockets/uSockets/src/eventing/*.c uWebSockets/uSockets/src/crypto/*.c";
-    char *cpp_shared = "-DWIN32_LEAN_AND_MEAN -DUWS_WITH_PROXY -DLIBUS_USE_LIBUV -DLIBUS_USE_QUIC -I uWebSockets/uSockets/boringssl/include -pthread -DLIBUS_USE_OPENSSL -flto -O3 -c -fPIC -std=c++17 -I uWebSockets/uSockets/src -I uWebSockets/src src/addon.cpp uWebSockets/uSockets/src/crypto/sni_tree.cpp";
+    char *c_shared = "-DWIN32_LEAN_AND_MEAN -DLIBUS_USE_LIBUV -DLIBUS_USE_QUIC -I fastWebSockets/fastSockets/lsquic/include -I fastWebSockets/fastSockets/boringssl/include -pthread -DLIBUS_USE_OPENSSL -flto -O3 -c -fPIC -I fastWebSockets/fastSockets/src fastWebSockets/fastSockets/src/*.c fastWebSockets/fastSockets/src/eventing/*.c fastWebSockets/fastSockets/src/crypto/*.c";
+    char *cpp_shared = "-DWIN32_LEAN_AND_MEAN -DFWS_WITH_PROXY -DLIBUS_USE_LIBUV -DLIBUS_USE_QUIC -I fastWebSockets/fastSockets/boringssl/include -pthread -DLIBUS_USE_OPENSSL -flto -O3 -c -fPIC -std=c++17 -I fastWebSockets/fastSockets/src -I fastWebSockets/src src/addon.cpp fastWebSockets/fastSockets/src/crypto/sni_tree.cpp";
 
     for (unsigned int i = 0; i < sizeof(versions) / sizeof(struct node_version); i++) {
         run("%s %s -I targets/node-%s/include/node", compiler, c_shared, versions[i].name);
         run("%s %s -I targets/node-%s/include/node", cpp_compiler, cpp_shared, versions[i].name);
-        run("%s -pthread -flto -O3 *.o uWebSockets/uSockets/boringssl/%s/ssl/libssl.a uWebSockets/uSockets/boringssl/%s/crypto/libcrypto.a uWebSockets/uSockets/lsquic/%s/src/liblsquic/liblsquic.a -std=c++17 -shared %s -o dist/uws_%s_%s_%s.node", cpp_compiler, arch, arch, arch, cpp_linker, os, arch, versions[i].abi);
+        run("%s -pthread -flto -O3 *.o fastWebSockets/fastSockets/boringssl/%s/ssl/libssl.a fastWebSockets/fastSockets/boringssl/%s/crypto/libcrypto.a fastWebSockets/fastSockets/lsquic/%s/src/liblsquic/liblsquic.a -std=c++17 -shared %s -o dist/fws_%s_%s_%s.node", cpp_compiler, arch, arch, arch, cpp_linker, os, arch, versions[i].abi);
     }
 }
 
 void copy_files() {
 #ifdef IS_WINDOWS
-    run("copy \"src\\uws.js\" dist /Y");
+    run("copy \"src\\fws.js\" dist /Y");
 #else
-    run("cp src/uws.js dist/uws.js");
+    run("cp src/fws.js dist/fws.js");
 #endif
 }
 
@@ -136,9 +136,9 @@ void build_windows(char *compiler, char *cpp_compiler, char *cpp_linker, char *o
     
     /* For all versions */
     for (unsigned int i = 0; i < sizeof(versions) / sizeof(struct node_version); i++) {
-        run("cl /MD /W3 /D WIN32_LEAN_AND_MEAN /D \"UWS_WITH_PROXY\" /D \"LIBUS_USE_LIBUV\" /D \"LIBUS_USE_QUIC\" /I uWebSockets/uSockets/lsquic/include /I uWebSockets/uSockets/lsquic/wincompat /I uWebSockets/uSockets/boringssl/include /D \"LIBUS_USE_OPENSSL\" /std:c++17 /I uWebSockets/uSockets/src uWebSockets/uSockets/src/*.c uWebSockets/uSockets/src/crypto/sni_tree.cpp "
-            "uWebSockets/uSockets/src/eventing/*.c uWebSockets/uSockets/src/crypto/*.c /I targets/node-%s/include/node /I uWebSockets/src /EHsc "
-            "/Ox /LD /Fedist/uws_win32_%s_%s.node src/addon.cpp advapi32.lib uWebSockets/uSockets/boringssl/x64/ssl/ssl.lib uWebSockets/uSockets/boringssl/x64/crypto/crypto.lib uWebSockets/uSockets/lsquic/src/liblsquic/Debug/lsquic.lib targets/node-%s/node.lib",
+        run("cl /MD /W3 /D WIN32_LEAN_AND_MEAN /D \"FWS_WITH_PROXY\" /D \"LIBUS_USE_LIBUV\" /D \"LIBUS_USE_QUIC\" /I fastWebSockets/fastSockets/lsquic/include /I fastWebSockets/fastSockets/lsquic/wincompat /I fastWebSockets/fastSockets/boringssl/include /D \"LIBUS_USE_OPENSSL\" /std:c++17 /I fastWebSockets/fastSockets/src fastWebSockets/fastSockets/src/*.c fastWebSockets/fastSockets/src/crypto/sni_tree.cpp "
+            "fastWebSockets/fastSockets/src/eventing/*.c fastWebSockets/fastSockets/src/crypto/*.c /I targets/node-%s/include/node /I fastWebSockets/src /EHsc "
+            "/Ox /LD /Fedist/fws_win32_%s_%s.node src/addon.cpp advapi32.lib fastWebSockets/fastSockets/boringssl/x64/ssl/ssl.lib fastWebSockets/fastSockets/boringssl/x64/crypto/crypto.lib fastWebSockets/fastSockets/lsquic/src/liblsquic/Debug/lsquic.lib targets/node-%s/node.lib",
             versions[i].name, arch, versions[i].abi, versions[i].name);
     }
 }

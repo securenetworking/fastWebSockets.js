@@ -1,6 +1,6 @@
 /* RateLimit example */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
 const RateLimit = (limit, interval) => { let now = 0; const last = Symbol(), count = Symbol(); setInterval(() => ++now, interval); return ws => { if (ws[last] != now) { ws[last] = now; ws[count] = 1 } else { return ++ws[count] > limit } } }
@@ -8,13 +8,13 @@ const rateLimit = RateLimit(1, 10000) //  limit is: 1 message per 10 seconds.
 const rateLimit2 = RateLimit(10, 2000) // limit per interval (milliseconds)
 
 
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
     key_file_name: 'misc/key.pem',
     cert_file_name: 'misc/cert.pem',
     passphrase: '1234'
 }).ws('/*', {
     /* Options */
-    compression: uWS.SHARED_COMPRESSOR,
+    compression: fWS.SHARED_COMPRESSOR,
     maxPayloadLength: 16 * 1024 * 1024,
     idleTimeout: 10,
     /* Handlers */

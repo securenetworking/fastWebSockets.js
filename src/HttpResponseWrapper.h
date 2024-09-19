@@ -29,7 +29,7 @@ struct HttpResponseWrapper {
 
     static void assumeCorked() {
         if (!insideCorkCallback) {
-            std::cerr << "Warning: uWS.HttpResponse writes must be made from within a corked callback. See documentation for uWS.HttpResponse.cork and consult the user manual." << std::endl;
+            std::cerr << "Warning: fWS.HttpResponse writes must be made from within a corked callback. See documentation for fWS.HttpResponse.cork and consult the user manual." << std::endl;
         }
     }
 
@@ -38,15 +38,15 @@ struct HttpResponseWrapper {
         Isolate *isolate = args.GetIsolate();
         void *res = args.Holder()->GetAlignedPointerFromInternalField(0);
         if (!res) {
-            args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(String::NewFromUtf8(isolate, "uWS.HttpResponse must not be accessed after uWS.HttpResponse.onAborted callback, or after a successful response. See documentation for uWS.HttpResponse and consult the user manual.", NewStringType::kNormal).ToLocalChecked())));
+            args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(String::NewFromUtf8(isolate, "fWS.HttpResponse must not be accessed after fWS.HttpResponse.onAborted callback, or after a successful response. See documentation for fWS.HttpResponse and consult the user manual.", NewStringType::kNormal).ToLocalChecked())));
         }
 
         if constexpr (PROTOCOL == 2) {
-            return (uWS::Http3Response *) res;
+            return (fWS::Http3Response *) res;
         } else if constexpr (PROTOCOL == 3) {
-            return (uWS::CachingHttpResponse *) res;
+            return (fWS::CachingHttpResponse *) res;
         } else {
-            return (uWS::HttpResponse<PROTOCOL != 0> *) res;
+            return (fWS::HttpResponse<PROTOCOL != 0> *) res;
         }
     }
 
@@ -222,7 +222,7 @@ struct HttpResponseWrapper {
                 /* We should check if this is really here! */
                 MaybeLocal<Value> maybeBoolean = CallJS(isolate, Local<Function>::New(isolate, p), 1, argv);
                 if (maybeBoolean.IsEmpty()) {
-                    std::cerr << "Warning: uWS.HttpResponse.onWritable callback should return Boolean. See documentation for uWS.HttpResponse.onWritable and consult the user manual." << std::endl;
+                    std::cerr << "Warning: fWS.HttpResponse.onWritable callback should return Boolean. See documentation for fWS.HttpResponse.onWritable and consult the user manual." << std::endl;
                     /* The default should be true, as it only adds a potential extra send, rather than erroneously avoid it */
                     return true;
                 }
@@ -438,13 +438,13 @@ struct HttpResponseWrapper {
     static Local<Object> init(Isolate *isolate) {
         Local<FunctionTemplate> resTemplateLocal = FunctionTemplate::New(isolate);
         if (SSL == 1) {
-            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "uWS.SSLHttpResponse", NewStringType::kNormal).ToLocalChecked());
+            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "fWS.SSLHttpResponse", NewStringType::kNormal).ToLocalChecked());
         } else if (SSL == 0) {
-            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "uWS.HttpResponse", NewStringType::kNormal).ToLocalChecked());
+            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "fWS.HttpResponse", NewStringType::kNormal).ToLocalChecked());
         } else if (SSL == 2) {
-            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "uWS.Http3Response", NewStringType::kNormal).ToLocalChecked());
+            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "fWS.Http3Response", NewStringType::kNormal).ToLocalChecked());
         } else if (SSL == 3) {
-            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "uWS.CachedHttpResponse", NewStringType::kNormal).ToLocalChecked());
+            resTemplateLocal->SetClassName(String::NewFromUtf8(isolate, "fWS.CachedHttpResponse", NewStringType::kNormal).ToLocalChecked());
         }
         resTemplateLocal->InstanceTemplate()->SetInternalFieldCount(1);
 

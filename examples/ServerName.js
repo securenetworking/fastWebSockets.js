@@ -1,9 +1,9 @@
 /* Minimal SSL example using ServerNameIndication */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
-const app = uWS.SSLApp({
+const app = fWS.SSLApp({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'

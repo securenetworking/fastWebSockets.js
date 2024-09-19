@@ -1,7 +1,7 @@
 /* Server-sent events (EventSource) example */
 /* curl -n localhost:9001 # check events by using curl */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
 const headers = [
@@ -20,7 +20,7 @@ function serializeData(data) {
   return `data: ${JSON.stringify(data)}\n\n`
 }
 
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'

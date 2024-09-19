@@ -1,8 +1,8 @@
 /* Non-SSL is simply App() */
-const uWS = require('uWebSockets.js');
-	uWS.App()
-	.get('/', new uWS.DeclarativeResponse().writeHeader('content-type', 'text/plain').end('Hi'))
-	.get('/id/:id', new uWS.DeclarativeResponse().writeHeader('content-type', 'text/plain')
+const fWS = require('fastWebSockets.js');
+	fWS.App()
+	.get('/', new fWS.DeclarativeResponse().writeHeader('content-type', 'text/plain').end('Hi'))
+	.get('/id/:id', new fWS.DeclarativeResponse().writeHeader('content-type', 'text/plain')
 					.writeHeader('x-powered-by', 'benchmark')
 					.writeParameterValue("id")
 					.write(" ")

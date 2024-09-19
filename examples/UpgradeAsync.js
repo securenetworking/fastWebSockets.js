@@ -1,15 +1,15 @@
 /* A quite detailed WebSockets upgrade example "async" */
 
-const uWS = require('../dist/uws.js');
+const fWS = require('../dist/fws.js');
 const port = 9001;
 
-const app = uWS./*SSL*/App({
+const app = fWS./*SSL*/App({
   key_file_name: 'misc/key.pem',
   cert_file_name: 'misc/cert.pem',
   passphrase: '1234'
 }).ws('/*', {
   /* Options */
-  compression: uWS.SHARED_COMPRESSOR,
+  compression: fWS.SHARED_COMPRESSOR,
   maxPayloadLength: 16 * 1024 * 1024,
   idleTimeout: 10,
   /* Handlers */

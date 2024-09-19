@@ -5,16 +5,16 @@ CONFIG -= qt
 
 SOURCES += \
         ../src/addon.cpp \
-        ../uWebSockets/uSockets/src/eventing/epoll.c \
-        ../uWebSockets/uSockets/src/context.c \
-        ../uWebSockets/uSockets/src/socket.c \
-        ../uWebSockets/uSockets/src/eventing/libuv.c \
-        ../uWebSockets/uSockets/src/ssl.c \
-        ../uWebSockets/uSockets/src/loop.c
+        ../fastWebSockets/fastSockets/src/eventing/epoll.c \
+        ../fastWebSockets/fastSockets/src/context.c \
+        ../fastWebSockets/fastSockets/src/socket.c \
+        ../fastWebSockets/fastSockets/src/eventing/libuv.c \
+        ../fastWebSockets/fastSockets/src/ssl.c \
+        ../fastWebSockets/fastSockets/src/loop.c
 
 INCLUDEPATH += ../targets/node-v11.1.0/include/node
-INCLUDEPATH += ../uWebSockets/src
-INCLUDEPATH += ../uWebSockets/uSockets/src
+INCLUDEPATH += ../fastWebSockets/src
+INCLUDEPATH += ../fastWebSockets/fastSockets/src
 
 HEADERS += \
     ../src/AppWrapper.h \

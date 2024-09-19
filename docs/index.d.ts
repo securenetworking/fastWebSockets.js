@@ -12,21 +12,21 @@
  * limitations under the License.
  */
 
-/** Native type representing a raw uSockets struct us_listen_socket_t.
+/** Native type representing a raw fastSockets struct us_listen_socket_t.
  * Careful with this one, it is entirely unchecked and native so invalid usage will blow up.
  */
 export interface us_listen_socket {
 
 }
 
-/** Native type representing a raw uSockets struct us_socket_t.
+/** Native type representing a raw fastSockets struct us_socket_t.
  * Careful with this one, it is entirely unchecked and native so invalid usage will blow up.
  */
 export interface us_socket {
 
 }
 
-/** Native type representing a raw uSockets struct us_socket_context_t.
+/** Native type representing a raw fastSockets struct us_socket_context_t.
  * Used while upgrading a WebSocket manually. */
 export interface us_socket_context_t {
 
@@ -69,7 +69,7 @@ export interface WebSocket<UserData> {
      */
     close() : void;
 
-    /** Sends a ping control message. Returns sendStatus similar to WebSocket.send (regarding backpressure). This helper function correlates to WebSocket::send(message, uWS::OpCode::PING, ...) in C++. */
+    /** Sends a ping control message. Returns sendStatus similar to WebSocket.send (regarding backpressure). This helper function correlates to WebSocket::send(message, fWS::OpCode::PING, ...) in C++. */
     ping(message?: RecognizedString) : number;
 
     /** Subscribe to a topic. */
@@ -236,7 +236,7 @@ export interface WebSocketBehavior<UserData> {
      * Disable by using 0. Defaults to 120.
      */
     idleTimeout?: number;
-    /** What permessage-deflate compression to use. uWS.DISABLED, uWS.SHARED_COMPRESSOR or any of the uWS.DEDICATED_COMPRESSOR_xxxKB. Defaults to uWS.DISABLED. */
+    /** What permessage-deflate compression to use. fWS.DISABLED, fWS.SHARED_COMPRESSOR or any of the fWS.DEDICATED_COMPRESSOR_xxxKB. Defaults to fWS.DISABLED. */
     compression?: CompressOptions;
     /** Maximum length of allowed backpressure per socket when publishing or sending messages. Slow receivers with too high backpressure will be skipped until they catch up or timeout. Defaults to 64 * 1024. */
     maxBackpressure?: number;
@@ -265,7 +265,7 @@ export interface WebSocketBehavior<UserData> {
 }
 
 /** Options used when constructing an app. Especially for SSLApp.
- * These are options passed directly to uSockets, C layer.
+ * These are options passed directly to fastSockets, C layer.
  */
 export interface AppOptions {
     key_file_name?: RecognizedString;
@@ -341,7 +341,7 @@ export function App(options?: AppOptions) : TemplatedApp;
 /** Constructs an SSL app. See App. */
 export function SSLApp(options: AppOptions) : TemplatedApp;
 
-/** Closes a uSockets listen socket. */
+/** Closes a fastSockets listen socket. */
 export function us_listen_socket_close(listenSocket: us_listen_socket) : void;
 
 /** Gets local port of socket (or listenSocket) or -1. */

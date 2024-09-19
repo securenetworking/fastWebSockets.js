@@ -6,20 +6,20 @@ CONFIG -= qt
 SOURCES += \
         src/host.cpp \
         src/addon.cpp \
-        uWebSockets/uSockets/src/eventing/epoll.c \
-        uWebSockets/uSockets/src/context.c \
-        uWebSockets/uSockets/src/socket.c \
-        uWebSockets/uSockets/src/eventing/libuv.c \
-        uWebSockets/uSockets/src/ssl.c \
-        uWebSockets/uSockets/src/loop.c
+        fastWebSockets/fastSockets/src/eventing/epoll.c \
+        fastWebSockets/fastSockets/src/context.c \
+        fastWebSockets/fastSockets/src/socket.c \
+        fastWebSockets/fastSockets/src/eventing/libuv.c \
+        fastWebSockets/fastSockets/src/ssl.c \
+        fastWebSockets/fastSockets/src/loop.c
 
 
 #Separate the Node.js addon from host compilation
 QMAKE_CXXFLAGS += -DADDON_IS_HOST
 
 INCLUDEPATH += /home/alexhultman/v8/v8/include
-INCLUDEPATH += uWebSockets/src
-INCLUDEPATH += uWebSockets/uSockets/src
+INCLUDEPATH += fastWebSockets/src
+INCLUDEPATH += fastWebSockets/fastSockets/src
 
 # We can link statically when I figure out how to compile V8 properly
 LIBS += /home/alexhultman/v8/v8/out/x64.release/libv8_libplatform.so
