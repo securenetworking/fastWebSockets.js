@@ -18,6 +18,8 @@
 #ifndef ADDON_UTILITIES_H
 #define ADDON_UTILITIES_H
 
+#include <openssl/ssl.h>
+#include <openssl/x509.h>
 #include <v8.h>
 using namespace v8;
 
@@ -25,8 +27,14 @@ using namespace v8;
 #include <node.h>
 
 MaybeLocal<Value> CallJS(Isolate *isolate, Local<Function> f, int argc, Local<Value> *argv) {
+    extern int calledIntoJS;
+    extern thread_local int insideCorkCallback;
+    /* All calls we do into JS are properly corked, except for res.cork, where we increase the counter explicitly */
+    insideCorkCallback++;
     /* Slow path */
-    return node::MakeCallback(isolate, isolate->GetCurrentContext()->Global(), f, argc, argv, {0, 0});
+    auto ret = node::MakeCallback(isolate, isolate->GetCurrentContext()->Global(), f, argc, argv, {0, 0});
+    insideCorkCallback--;
+    return ret;
 }
 
 Local<v8::ArrayBuffer> ArrayBuffer_New(Isolate *isolate, void *data, size_t length) {
@@ -46,8 +54,8 @@ struct PerSocketData {
 
 struct PerContextData {
     Isolate *isolate;
-    UniquePersistent<Object> reqTemplate;
-    UniquePersistent<Object> resTemplate[3];
+    UniquePersistent<Object> reqTemplate[2]; // 0 = non-SSL/SSL, 1 = Http3
+    UniquePersistent<Object> resTemplate[4]; // 0 = non-SSL, 1 = SSL, 2 = Http3
     UniquePersistent<Object> wsTemplate[2];
 
     /* We hold all apps until free */
@@ -162,5 +170,36 @@ public:
         }
     }
 };
+
+// Utility function to extract raw certificate data
+std::string extractX509PemCertificate(SSL* ssl) {
+    std::string pemCertificate;
+
+    if (!ssl) {
+        return pemCertificate;
+    }
+
+    // Get the peer certificate
+    X509* peerCertificate = SSL_get_peer_certificate(ssl);
+    if (!peerCertificate) {
+        // No peer certificate available
+        return pemCertificate;
+    }
+
+    // Convert X509 certificate to PEM format
+    BIO* bio = BIO_new(BIO_s_mem());
+    if(bio) {
+        if (PEM_write_bio_X509(bio, peerCertificate)) {
+            char* buffer;
+            long length = BIO_get_mem_data(bio, &buffer);
+            pemCertificate.assign(buffer, length);
+        }
+        BIO_free(bio);
+    }
+
+    // Free the peer certificate
+    X509_free(peerCertificate);
+    return pemCertificate;
+}
 
 #endif
